@@ -15,6 +15,8 @@ namespace SSMP.Animation.Effects;
 /// Abstract base class for the animation effect of nail slashes.
 /// </summary>
 internal abstract class SlashBase : ParryableEffect {
+
+    public const int ATTACK_LAYER = (int) GlobalEnums.PhysLayers.ENEMY_ATTACK;
     /// <inheritdoc/>
     public abstract override void Play(GameObject playerObject, CrestType crestType, byte[]? effectInfo);
 
@@ -127,6 +129,8 @@ internal abstract class SlashBase : ParryableEffect {
         var poly = slashObj.GetComponent<PolygonCollider2D>();
         var mesh = slashObj.GetComponent<MeshRenderer>();
         var anim = slashObj.GetComponent<tk2dSpriteAnimator>();
+
+        slashObj.layer = ATTACK_LAYER;
 
         string animName;
         Vector3 scale;

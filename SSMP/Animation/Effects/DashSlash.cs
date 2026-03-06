@@ -88,6 +88,7 @@ internal class DashSlash : SlashBase {
             var mesh = slashObj.GetComponent<MeshRenderer>();
             var anim = slashObj.GetComponent<tk2dSpriteAnimator>();
             var scale = dashStab.scale;
+            slashObj.layer = ATTACK_LAYER;
 
             // Remove the event subscribers of DamageEnemies components, because it will call a method relating to
             // the local HeroController, which does not exist for this artificial slash

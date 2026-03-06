@@ -97,7 +97,7 @@ internal class NeedleStrike : DamageAnimationEffect {
     /// </summary>
     private readonly bool _witchLoop;
 
-    private const int ATTACK_LAYER = (int) GlobalEnums.PhysLayers.ENEMY_ATTACK;
+    private const int ATTACK_LAYER = SlashBase.ATTACK_LAYER;
 
     public NeedleStrike(bool witchLoop) {
         _witchLoop = witchLoop;
