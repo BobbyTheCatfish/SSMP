@@ -170,8 +170,11 @@ internal class PlayerManager : IPlayerManager {
             typeof(Rigidbody2D),
             typeof(CoroutineCancelComponent)
         ) {
-            layer = 9
+            layer = 3
         };
+
+        // Set up physics layer 3
+        Physics2D.SetLayerCollisionMask(3, 35651915);
 
         playerPrefab.transform.SetParent(_playerContainerPrefab.transform);
 
