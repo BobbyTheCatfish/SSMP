@@ -147,9 +147,12 @@ internal class PlayerManager {
             typeof(Rigidbody2D),
             typeof(CoroutineCancelComponent)
         ) {
-            layer = 9
+            layer = 3
         };
-        
+
+        // Set up physics layer 3
+        Physics2D.SetLayerCollisionMask(3, 35651915);
+
         playerPrefab.transform.SetParent(_playerContainerPrefab.transform);
 
         // Now we need to copy over a lot of variables from the local player object
