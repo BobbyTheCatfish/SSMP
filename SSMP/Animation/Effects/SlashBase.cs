@@ -16,7 +16,7 @@ namespace SSMP.Animation.Effects;
 /// </summary>
 internal abstract class SlashBase : ParryableEffect {
 
-    public const int ATTACK_LAYER = (int) GlobalEnums.PhysLayers.ENEMY_ATTACK;
+    public const int ATTACK_LAYER = (int) GlobalEnums.PhysLayers.HERO_ATTACK;
     /// <inheritdoc/>
     public abstract override void Play(GameObject playerObject, CrestType crestType, byte[]? effectInfo);
 
@@ -130,7 +130,18 @@ internal abstract class SlashBase : ParryableEffect {
         var mesh = slashObj.GetComponent<MeshRenderer>();
         var anim = slashObj.GetComponent<tk2dSpriteAnimator>();
 
+        var damageEnemies = slashObj.GetComponent<DamageEnemies>();
+        if (damageEnemies != null) {
+            damageEnemies.doesNotTink = true;
+            damageEnemies.doesNotTinkThroughWalls = true;
+            damageEnemies.doesNotParry = true;
+            damageEnemies.silkGeneration = HitSilkGeneration.None;
+            damageEnemies.attackType = AttackTypes.NailBeam;
+            //Component.Destroy(damageEnemies); // Use if we want to disable enemy damage
+        }
+
         slashObj.layer = ATTACK_LAYER;
+        slashObj.tag = "Nail Beam"; // Remove if we want to re-enable hitting other peoples interactables
 
         string animName;
         Vector3 scale;

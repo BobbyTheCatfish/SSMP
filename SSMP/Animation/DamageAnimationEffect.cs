@@ -34,11 +34,13 @@ internal abstract class DamageAnimationEffect : AnimationEffect {
     /// </summary>
     /// <param name="target">The target game object to attach the component to.</param>
     /// <param name="damage">The number of mask of damage it should deal.</param>
+    /// <param name="canTink">If the attack can be "tinked" (needle parried)</param>
     /// <returns>The <see cref="DamageHero"/> component that was added to the game object</returns>
-    protected static DamageHero AddDamageHeroComponent(GameObject target, int damage = 1) {
+    protected static DamageHero AddDamageHeroComponent(GameObject target, int damage = 1, bool canTink = true) {
         var damageHero = target.AddComponentIfNotPresent<DamageHero>();
         damageHero.damageDealt = damage;
         damageHero.OnDamagedHero = new UnityEvent();
+        damageHero.canClashTink = canTink;
 
         return damageHero;
     }
@@ -58,8 +60,8 @@ internal abstract class DamageAnimationEffect : AnimationEffect {
     /// <param name="target">The target game object to attach or remove the component from.</param>
     /// <param name="damage">The number of mask of damage it should deal.</param>
     /// <returns>The <see cref="DamageHero"/> component that was added if PVP was turned on</returns>
-    protected DamageHero? SetDamageHeroState(GameObject target, int damage = 1) {
-        return SetDamageHeroState(target, ServerSettings.IsPvpEnabled && ShouldDoDamage, damage);
+    protected DamageHero? SetDamageHeroState(GameObject target, int damage = 1, canTink = true) {
+        return SetDamageHeroState(target, ServerSettings.IsPvpEnabled && ShouldDoDamage, damage, canTink);
     }
 
     /// <summary>
@@ -70,9 +72,9 @@ internal abstract class DamageAnimationEffect : AnimationEffect {
     /// <param name="damage">The number of mask of damage it should deal.</param>
     /// <param name="doDamage">If the damager should be enabled or not</param>
     /// <returns>The <see cref="DamageHero"/> component that was added if PVP was turned on</returns>
-    protected static DamageHero? SetDamageHeroState(GameObject target, bool doDamage, int damage = 1) {
+    protected static DamageHero? SetDamageHeroState(GameObject target, bool doDamage, int damage = 1, canTink = true) {
         if (doDamage && damage > 0) {
-            return AddDamageHeroComponent(target, damage);
+            return AddDamageHeroComponent(target, damage, canTink);
         }
 
         RemoveDamageHeroComponent(target);
