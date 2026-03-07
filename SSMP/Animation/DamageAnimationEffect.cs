@@ -33,9 +33,11 @@ internal abstract class DamageAnimationEffect : AnimationEffect {
     /// </summary>
     /// <param name="target">The target game object to attach the component to.</param>
     /// <param name="damage">The number of mask of damage it should deal.</param>
-    protected static void AddDamageHeroComponent(GameObject target, int damage = 1) {
+    /// <param name="canTink">If the attack can be "tinked"</param>
+    protected static void AddDamageHeroComponent(GameObject target, int damage = 1, bool canTink = true) {
         var damageHero = target.AddComponent<DamageHero>();
         damageHero.damageDealt = damage;
         damageHero.OnDamagedHero = new UnityEvent();
+        damageHero.canClashTink = canTink;
     }
 }

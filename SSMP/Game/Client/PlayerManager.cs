@@ -79,6 +79,8 @@ internal class PlayerManager {
     /// </summary>
     private readonly Dictionary<ushort, GameObject> _activePlayers;
 
+    private const int PLAYER_LAYER = (int) GlobalEnums.PhysLayers.DEFAULT;
+
     public PlayerManager(
         ServerSettings serverSettings,
         Dictionary<ushort, ClientPlayerData> playerData
@@ -147,11 +149,8 @@ internal class PlayerManager {
             typeof(Rigidbody2D),
             typeof(CoroutineCancelComponent)
         ) {
-            layer = 3
+            layer = PLAYER_LAYER
         };
-
-        // Set up physics layer 3
-        Physics2D.SetLayerCollisionMask(3, 35651915);
 
         playerPrefab.transform.SetParent(_playerContainerPrefab.transform);
 
