@@ -358,7 +358,7 @@ internal abstract class BasePacket<TPacketId> where TPacketId : Enum {
             }
 
             // Read the length of the addon packet data for this addon
-            var addonDataLength = packet.ReadUShort();
+            var addonDataLength = packet.ReadInt();
 
             // Read exactly as many bytes as was indicated by the previously read value
             var addonDataBytes = packet.ReadBytes(addonDataLength);
