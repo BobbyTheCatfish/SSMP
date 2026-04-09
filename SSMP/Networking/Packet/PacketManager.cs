@@ -430,7 +430,7 @@ internal class PacketManager {
             var packetLengthValue = BitConverter.IsLittleEndian
                 ? BitConverter.ToUInt16(data, readPosition)
                 // Manual little-endian decode: low byte first, then high byte
-                : (int) (data[readPosition] | (data[readPosition + 1] << 8));
+                : (ushort) (data[readPosition] | (data[readPosition + 1] << 8));
             var packetLength = (int) packetLengthValue;
 
             // Sanity check against allocation attacks or corruption.

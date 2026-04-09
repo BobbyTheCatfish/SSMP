@@ -83,7 +83,7 @@ internal class Packet : IPacket {
     /// </summary>
     public void WriteLength() {
         if (_buffer == null) throw new InvalidOperationException("Cannot write to Read-Only Packet");
-        var length = (int) _buffer.Count;
+        var length = (ushort) _buffer.Count;
         _buffer.Insert(0, (byte) length);
         _buffer.Insert(1, (byte) (length >> 8));
         Length = _buffer.Count;
