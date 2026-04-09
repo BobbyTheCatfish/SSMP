@@ -144,8 +144,7 @@ internal class BindBurst : Bind {
 
             damager.layer = (int) GlobalEnums.PhysLayers.HERO_ATTACK;
 
-            var damage = upgraded ? ServerSettings.ClawMirrorUpgradedDamage : ServerSettings.ClawMirrorDamage;
-            var damageComponent = AddDamageHeroComponent(damager, damage);
+            var damageComponent = AddDamageHeroComponent(damager, damage, false);
             damageComponent.hazardType = GlobalEnums.HazardType.EXPLOSION;
         }
     }

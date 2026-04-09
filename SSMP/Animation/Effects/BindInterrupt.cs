@@ -97,7 +97,7 @@ internal class BindInterrupt : Bind {
         if (ServerSettings.IsPvpEnabled && ShouldDoDamage) {
             var damager = bindBell.FindGameObjectInChildren("damager");
             if (damager != null) {
-                AddDamageHeroComponent(damager, ServerSettings.WardingBellDamage);
+                AddDamageHeroComponent(damager, ServerSettings.WardingBellDamage, false);
             } else {
                 Logger.Warn("Unable to add damager to warding bell burst");
             }

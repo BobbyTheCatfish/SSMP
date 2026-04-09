@@ -141,7 +141,7 @@ internal abstract class SlashBase : ParryableEffect {
         }
 
         slashObj.layer = ATTACK_LAYER;
-        slashObj.tag = "Nail Beam"; // Remove if we want to re-enable hitting other peoples interactables
+        slashObj.tag = "Nail Beam"; // Remove if we want to re-enable hitting other peoples interactable objects
 
         string animName;
         Vector3 scale;
