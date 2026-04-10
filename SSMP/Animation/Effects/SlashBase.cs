@@ -16,7 +16,7 @@ namespace SSMP.Animation.Effects;
 /// </summary>
 internal abstract class SlashBase : ParryableEffect {
 
-    public const int ATTACK_LAYER = (int) GlobalEnums.PhysLayers.HERO_ATTACK;
+    public const int ATTACK_LAYER = (int) GlobalEnums.PhysLayers.ENEMY_ATTACK;
     /// <inheritdoc/>
     public abstract override void Play(GameObject playerObject, CrestType crestType, byte[]? effectInfo);
 

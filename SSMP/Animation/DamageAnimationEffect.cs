@@ -42,6 +42,16 @@ internal abstract class DamageAnimationEffect : AnimationEffect {
         damageHero.OnDamagedHero = new UnityEvent();
         damageHero.canClashTink = canTink;
 
+        // If ClashEvents isn't created and populated, clashing will raise an error.
+        if (canTink) {
+            damageHero.ClashEvents = new() {
+                OnClashUp = new(),
+                OnClashDown = new(),
+                OnClashLeft = new(),
+                OnClashRight = new()
+            };
+        }
+
         return damageHero;
     }
 
