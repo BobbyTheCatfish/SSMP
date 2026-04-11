@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace SSMP.Game.Client.Skin;
@@ -9,38 +10,24 @@ internal class PlayerSkin {
     /// <summary>
     /// Whether this skin contains the hornet texture.
     /// </summary>
-    public bool HasHornetTexture { get; private set; }
+    /// 
 
-    /// <summary>
-    /// The hornet texture for the skin, or null if it does not have it.
-    /// </summary>
-    public Texture? HornetTexture { get; private set; }
+    public Texture?[] Knight { get; private set; } = new Texture?[4];
 
-    /// <summary>
-    /// Whether this skin contains the sprint texture.
-    /// </summary>
-    public bool HasSprintTexture { get; private set; }
-
-    /// <summary>
-    /// The sprint texture for the skin, or null if it does not have it.
-    /// </summary>
-    public Texture? SprintTexture { get; private set; }
+    private void CheckIndexInBounds(int index, int max, int min = 0) {
+        if (index > max || index < min) {
+            throw new IndexOutOfRangeException($"Atlas index must be between {min} and {max}");
+        }
+    }
 
     /// <summary>
     /// Set the hornet texture for the skin.
     /// </summary>
-    /// <param name="hornetTexture">The hornet texture.</param>
-    public void SetHornetTexture(Texture hornetTexture) {
-        HornetTexture = hornetTexture;
-        HasHornetTexture = true;
+    /// <param name="atlasTexture">The hornet atlas texture.</param>
+    /// <param name="atlasIndex">The index of the atlas</param>
+    public void SetKnightTexture(Texture atlasTexture, int atlasIndex) {
+        CheckIndexInBounds(atlasIndex, max: 3);
+        Knight[atlasIndex] = atlasTexture;
     }
 
-    /// <summary>
-    /// Set the sprint texture for the skin.
-    /// </summary>
-    /// <param name="sprintTexture">The sprint texture.</param>
-    public void SetSprintTexture(Texture sprintTexture) {
-        SprintTexture = sprintTexture;
-        HasSprintTexture = true;
-    }
 }

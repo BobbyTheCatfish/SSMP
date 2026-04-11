@@ -111,24 +111,17 @@ internal class SkinManager {
             return;
         }
 
-        if (playerSkin.HasHornetTexture) {
-            spriteAnimator
-                .GetClipByName("Idle")
-                .frames[0]
-                .spriteCollection
-                .spriteDefinitions[0]
-                .material
-                .mainTexture = playerSkin.HornetTexture;
-        }
+        // Set knight textures
+        var knightCollection = spriteAnimator
+            .GetClipByName("Sprint")
+            .frames[0]
+            .spriteCollection;
 
-        if (playerSkin.HasSprintTexture) {
-            spriteAnimator
-                .GetClipByName("Sprint")
-                .frames[0]
-                .spriteCollection
-                .spriteDefinitions[0]
-                .material
-                .mainTexture = playerSkin.SprintTexture;
+        for (var i = 0; i < 4; i++) {
+            var atlas = playerSkin.Knight[i] ?? _defaultPlayerSkin?.Knight[i];
+            if (atlas) {
+                knightCollection.materials[i].mainTexture = atlas;
+            }
         }
     }
 
@@ -185,33 +178,28 @@ internal class SkinManager {
 
         // Get the hornet and sprint texture from the sprite definitions of the respective animation clips
         // in the sprite animator of the local HeroController object
-        var hornetTexture = spriteAnimator
-            .GetClipByName("Idle")?
-            .frames[0]?
-            .spriteCollection
-            .spriteDefinitions[0]?
-            .material
-            .mainTexture as Texture2D;
-        var sprintTexture = spriteAnimator
-            .GetClipByName("Sprint")?
-            .frames[0]?
-            .spriteCollection
-            .spriteDefinitions[0]?
-            .material
-            .mainTexture as Texture2D;
 
-        if (hornetTexture == null) {
-            Logger.Warn("Tried to store default player skin, but hornet texture was null");
+        var materials = spriteAnimator.GetClipByName("Idle")?
+            .frames[0]?
+            .spriteCollection
+            .materials;
+
+        if (materials == null) {
+            Logger.Warn("Tried to store default player skin, but player sprite collection was null");
             return;
         }
 
-        if (sprintTexture == null) {
-            Logger.Warn("Tried to store default player skin, but sprint texture was null");
-            return;
+        var skin = new PlayerSkin();
+
+        for (int i = 0; i < 4; i++) {
+            if (i < materials.Length) {
+                Logger.Warn($"Tried to store default player skin, but atlas {i} texture was null");
+                return;
+            }
+
+            skin.SetKnightTexture(materials[i].mainTexture, i);
         }
 
-        _defaultPlayerSkin = new PlayerSkin();
-        _defaultPlayerSkin.SetHornetTexture(hornetTexture);
-        _defaultPlayerSkin.SetSprintTexture(sprintTexture);
+        _defaultPlayerSkin = skin;
     }
 }
