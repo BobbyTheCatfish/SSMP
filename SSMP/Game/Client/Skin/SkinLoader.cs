@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Reflection;
 using UnityEngine;
 using Logger = SSMP.Logging.Logger;
 
@@ -14,12 +15,7 @@ internal class SkinLoader {
     /// Temporary boolean that dictates whether skin loading is enabled.
     /// </summary>
     /// TODO: implement skins
-    private static readonly bool Disabled = true;
-    
-    /// <summary>
-    /// The name of the mod folder within the Silksong plugin folder.
-    /// </summary>
-    private const string ModFolderName = "SSMP";
+    private static readonly bool Disabled = false;
 
     /// <summary>
     /// The name of the skin folder in the SSMP mod folder.
@@ -29,12 +25,8 @@ internal class SkinLoader {
     /// <summary>
     /// The name of the Knight texture file.
     /// </summary>
-    private const string KnightTextureFileName = "Knight.png";
-
-    /// <summary>
-    /// The name of the Sprint texture file.
-    /// </summary>
-    private const string SprintTextureFileName = "Sprint.png";
+    private const string KnightFolderName = "Knight";
+    private const string AtlasFileName = "atlas{0}.png";
 
     /// <summary>
     /// The name of the file that contains the ID for a skin.
@@ -47,12 +39,12 @@ internal class SkinLoader {
     private readonly string _skinFolderPath;
 
     public SkinLoader() {
-        var modsFolderPath = GetModsFolder();
+        var modsFolderPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
-        _skinFolderPath = CombinePaths(modsFolderPath, ModFolderName, SkinFolderName);
-        // if (!Directory.Exists(_skinFolderPath)) {
-            // Directory.CreateDirectory(_skinFolderPath);
-        // }
+        _skinFolderPath = CombinePaths(modsFolderPath, SkinFolderName);
+         if (!Directory.Exists(_skinFolderPath)) {
+            Directory.CreateDirectory(_skinFolderPath);
+        }
     }
 
     /// <summary>
@@ -173,14 +165,13 @@ internal class SkinLoader {
             return false;
         }
 
-        var knightPath = Path.Combine(path, KnightTextureFileName);
-        if (LoadTexture(knightPath, out var knightTexture)) {
-            playerSkin.SetHornetTexture(knightTexture);
-        }
-
-        var sprintPath = Path.Combine(path, SprintTextureFileName);
-        if (LoadTexture(sprintPath, out var sprintTexture)) {
-            playerSkin.SetSprintTexture(sprintTexture);
+        // Load Knight atlases
+        var knightPath = Path.Join(path, KnightFolderName);
+        for (var i = 0; i < 4; i++) {
+            var atlasPath = Path.Combine(knightPath, string.Format(AtlasFileName, i));
+            if (LoadTexture(atlasPath, out var atlasTexture)) {
+                playerSkin.SetKnightTexture(atlasTexture, i);
+            }
         }
 
         return true;
@@ -204,7 +195,7 @@ internal class SkinLoader {
         var textureBytes = File.ReadAllBytes(filePath);
         texture = new Texture2D(1, 1);
 
-        return texture.LoadImage(textureBytes, true);
+        return texture.LoadImage(textureBytes, false);
     }
 
     /// <summary>
@@ -221,19 +212,6 @@ internal class SkinLoader {
         }
 
         return id;
-    }
-
-    /// <summary>
-    /// Get the mods folder based on the underlying operating system.
-    /// </summary>
-    /// <returns>The full path to the mods directory.</returns>
-    private static string GetModsFolder() {
-        switch (SystemInfo.operatingSystemFamily) {
-            case OperatingSystemFamily.MacOSX:
-                return Path.GetFullPath($"{Application.dataPath}/Resources/Data/Managed/Mods");
-            default:
-                return Path.GetFullPath($"{Application.dataPath}/Managed/Mods");
-        }
     }
 
     /// <summary>
