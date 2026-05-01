@@ -51,8 +51,8 @@ internal class SawtoothCirclet : BaseTool {
         var damagerLeft = damagerParent?.FindGameObjectInChildren("Damager L");
 
         var damage = serverSettings.SawtoothCircletDamage;
-        if (damagerRight != null) SetDamageHeroState(damagerRight, doDamage, damage);
-        if (damagerLeft != null) SetDamageHeroState(damagerLeft, doDamage, damage);
+        if (damagerRight != null) SetDamageHeroState(damagerRight, doDamage, damage, serverSettings.AllowToolParries);
+        if (damagerLeft != null) SetDamageHeroState(damagerLeft, doDamage, damage, serverSettings.AllowToolParries);
 
         // Refresh the circlet
         circlet.SetActive(false);

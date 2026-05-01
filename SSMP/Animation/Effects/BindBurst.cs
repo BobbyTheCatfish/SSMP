@@ -224,7 +224,7 @@ internal class BindBurst : Bind {
             }
 
             // Add or remove damage component from Damager object
-            SetDamageHeroState(child.gameObject);
+            SetDamageHeroState(child.gameObject, 1, false);
         }
     }
 

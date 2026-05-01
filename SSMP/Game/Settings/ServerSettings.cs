@@ -85,11 +85,54 @@ public class ServerSettings : IServerSettings, IEquatable<ServerSettings> {
         }
     } = true;
 
-    // /// <inheritdoc />
-    // [SettingAlias("parries")]
-    // [ModMenuSetting("Parries", "Whether parrying certain player attacks is possible")]
-    // public bool AllowParries { get; set; } = true;
-    
+    /// <inheritdoc />
+    [SettingAlias("parries", "needleparries", "parry", "needleparry")]
+    [ModMenuSetting("Needle Parries", "Whether parrying normal player attacks is possible")]
+    public bool AllowNeedleParries {
+        get;
+        init {
+            if (field == value) return;
+            field = value;
+            ChangeEvent?.Invoke(nameof(AllowNeedleParries));
+        }
+    } = true;
+
+    /// <inheritdoc />
+    [SettingAlias("needlestrikeparries", "strikeparries", "artparries", "needlestrikeparry", "strikeparry", "artparry")]
+    [ModMenuSetting("Needle Strike Parries", "Whether parrying needle strikes is possible")]
+    public bool AllowNeedleStrikeParries {
+        get;
+        init {
+            if (field == value) return;
+            field = value;
+            ChangeEvent?.Invoke(nameof(AllowNeedleStrikeParries));
+        }
+    } = true;
+
+    /// <inheritdoc />
+    [SettingAlias("silkskillparries", "skillparries", "silkskillparry", "skillparry")]
+    [ModMenuSetting("Silk Skill Parries", "Whether parrying silk skills is possible")]
+    public bool AllowSilkSkillParries {
+        get;
+        init {
+            if (field == value) return;
+            field = value;
+            ChangeEvent?.Invoke(nameof(AllowSilkSkillParries));
+        }
+    } = true;
+
+    /// <inheritdoc />
+    [SettingAlias("toolparries", "toolparry")]
+    [ModMenuSetting("Tool Parries", "Whether parrying tools is possible")]
+    public bool AllowToolParries {
+        get;
+        init {
+            if (field == value) return;
+            field = value;
+            ChangeEvent?.Invoke(nameof(AllowToolParries));
+        }
+    } = true;
+
     /// <inheritdoc />
     [SettingAlias("needledmg")]
     [ModMenuSetting("Needle Damage", "The number of masks of damage that a player's needle swing deals")]

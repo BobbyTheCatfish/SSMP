@@ -26,7 +26,7 @@ internal class StraightPin : BaseTool {
             _modifiedPrefab.SetActive(false);
             _modifiedPrefab.name = "STRAIGHT PIN";
 
-            AddDamageHeroComponent(_modifiedPrefab);
+            AddDamageHeroComponent(_modifiedPrefab, 1, ServerSettings.AllowToolParries);
         }
 
         // Spawn in prefab

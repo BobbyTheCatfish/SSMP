@@ -399,7 +399,7 @@ internal class NeedleStrike : DamageAnimationEffect {
         Object.DestroyImmediate(gameObject.GetComponent<NailSlashTerrainThunk>());
 
         if (damage.HasValue) {
-            AddDamageHeroComponent(gameObject, damage.Value);
+            AddDamageHeroComponent(gameObject, damage.Value, ServerSettings.AllowNeedleStrikeParries);
         }
     }
 }

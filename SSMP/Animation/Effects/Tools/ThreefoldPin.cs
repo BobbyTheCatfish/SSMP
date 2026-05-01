@@ -27,7 +27,7 @@ internal class ThreefoldPin : BaseTool {
             _modifiedPrefab.SetActive(false);
             _modifiedPrefab.name = "THREEFOLD PIN";
 
-            AddDamageHeroComponent(_modifiedPrefab);
+            AddDamageHeroComponent(_modifiedPrefab, 1, ServerSettings.AllowToolParries);
         }
 
         // Play audio

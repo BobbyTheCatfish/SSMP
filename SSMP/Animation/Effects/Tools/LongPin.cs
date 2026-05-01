@@ -50,7 +50,7 @@ internal class LongPin : BaseTool {
 
             longPinTool.reboundBox = reboundBoxObject;
 
-            AddDamageHeroComponent(_modifiedPrefab);
+            AddDamageHeroComponent(_modifiedPrefab, 1, ServerSettings.AllowToolParries);
         }
 
         // Spawn pin

@@ -126,7 +126,7 @@ internal class FleaBrew : BaseTool {
             // Set the damager
             var damager = _modifiedPoisonTrail.FindGameObjectInChildren("damager");
             if (damager) {
-                AddDamageHeroComponent(damager, ServerSettings.PoisonBrewDamage);
+                AddDamageHeroComponent(damager, ServerSettings.PoisonBrewDamage, false);
                 damager.layer = 17;
             }
         } else {
