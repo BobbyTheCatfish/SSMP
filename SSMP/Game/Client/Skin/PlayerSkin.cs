@@ -8,11 +8,9 @@ namespace SSMP.Game.Client.Skin;
 /// </summary>
 internal class PlayerSkin {
     /// <summary>
-    /// Whether this skin contains the hornet texture.
+    /// The main hornet textures.
     /// </summary>
-    /// 
-
-    public Texture?[] Knight { get; private set; } = new Texture?[4];
+    public readonly Texture?[] Knight = new Texture?[4];
 
     private void CheckIndexInBounds(int index, int max, int min = 0) {
         if (index > max || index < min) {

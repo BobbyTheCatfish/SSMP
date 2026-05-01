@@ -69,8 +69,9 @@ internal abstract class DamageAnimationEffect : AnimationEffect {
     /// </summary>
     /// <param name="target">The target game object to attach or remove the component from.</param>
     /// <param name="damage">The number of mask of damage it should deal.</param>
+    /// <param name="canTink">If the attack can be 'tinked'</param>
     /// <returns>The <see cref="DamageHero"/> component that was added if PVP was turned on</returns>
-    protected DamageHero? SetDamageHeroState(GameObject target, int damage = 1, canTink = true) {
+    protected DamageHero? SetDamageHeroState(GameObject target, int damage = 1, bool canTink = true) {
         return SetDamageHeroState(target, ServerSettings.IsPvpEnabled && ShouldDoDamage, damage, canTink);
     }
 
@@ -81,8 +82,9 @@ internal abstract class DamageAnimationEffect : AnimationEffect {
     /// <param name="target">The target game object to attach or remove the component from.</param>
     /// <param name="damage">The number of mask of damage it should deal.</param>
     /// <param name="doDamage">If the damager should be enabled or not</param>
+    /// <param name="canTink">If the attack can be 'tinked'</param>
     /// <returns>The <see cref="DamageHero"/> component that was added if PVP was turned on</returns>
-    protected static DamageHero? SetDamageHeroState(GameObject target, bool doDamage, int damage = 1, canTink = true) {
+    protected static DamageHero? SetDamageHeroState(GameObject target, bool doDamage, int damage = 1, bool canTink = true) {
         if (doDamage && damage > 0) {
             return AddDamageHeroComponent(target, damage, canTink);
         }
