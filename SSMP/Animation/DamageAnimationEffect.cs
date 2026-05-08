@@ -1,3 +1,4 @@
+using SSMP.Animation.Effects;
 using SSMP.Internals;
 using SSMP.Util;
 using UnityEngine;
@@ -41,6 +42,9 @@ internal abstract class DamageAnimationEffect : AnimationEffect {
         damageHero.damageDealt = damage;
         damageHero.OnDamagedHero = new UnityEvent();
         damageHero.canClashTink = canTink;
+
+        target.layer = SlashBase.ATTACK_LAYER;
+        target.tag = "Nail Beam";
 
         // If ClashEvents isn't created and populated, clashing will raise an error.
         if (canTink) {
