@@ -336,6 +336,13 @@ internal class ConnectInterface {
     private const string ErrorUnknown = "Failed to connect:\nUnknown reason";
 
     /// <summary>
+    /// Warning shown when matchmaking HTTP traffic and UDP discovery use different network paths.
+    /// </summary>
+    private const string ErrorSplitTunnelDetected =
+        "Failed to connect:\nMatchmaking detected split-tunneling or interfering network software. " +
+        "Ensure MMS and gameplay traffic use the same network path.";
+
+    /// <summary>
     /// Large blocking message shown when the client must update before using matchmaking.
     /// </summary>
     private const string MatchmakingUpdateRequiredText =
@@ -519,6 +526,11 @@ internal class ConnectInterface {
     /// Tracks the currently selected tab so async UI refreshes preserve the active view.
     /// </summary>
     private Tab _activeTab = Tab.Matchmaking;
+
+    /// <summary>
+    /// If non-null, indicates the Lobby ID we should retry connecting to once if a hole punch times out.
+    /// </summary>
+    private string? _pendingHolePunchRetryLobbyId;
 
     /// <summary>
     /// Public accessor for the MMS client.
@@ -1191,6 +1203,9 @@ internal class ConnectInterface {
             return;
         }
 
+        // Arm the one-time retry for a hole-punch failure
+        _pendingHolePunchRetryLobbyId = lobbyId;
+
         ShowFeedback(Color.yellow, "Connecting...");
         MonoBehaviourUtil.Instance.StartCoroutine(JoinLobbyCoroutine(lobbyId, username));
     }
@@ -1202,7 +1217,7 @@ internal class ConnectInterface {
         ShowFeedback(Color.yellow, "Joining lobby...");
 
         // Create hole-punch socket for non-Steam lobbies
-        var holePunchSocket = CreateHolePunchSocket();
+        var holePunchSocket = CreateHolePunchSocket(_modSettings.MmsSettings.LocalBindIp);
         var clientPort = GetSocketPort(holePunchSocket);
 
         // Join lobby and get connection info
@@ -1272,12 +1287,21 @@ internal class ConnectInterface {
                     yield break;
                 }
 
+                if (MmsClient.LastJoinFailureReason == "client_path_mismatch") {
+                    ShowFeedback(Color.red, ErrorSplitTunnelDetected);
+                    yield break;
+                }
+
                 ShowFeedback(Color.red, "Lobby not found, offline, or join failed");
                 yield break;
             }
 
             ConnectToMatchmakingLobby(
-                $"{joinStart.HostIp}:{joinStart.HostPort}", lanConnectionData, username, holePunchSocket
+                $"{joinStart.HostIp}:{joinStart.HostPort}",
+                lanConnectionData,
+                _modSettings.MmsSettings.PreferLanFastPath,
+                username,
+                holePunchSocket
             );
         }
     }
@@ -1401,14 +1425,16 @@ internal class ConnectInterface {
         var isPublic = visibility == LobbyVisibility.Public;
 
         // Create socket first to get actual port
-        var holePunchSocket = CreateHolePunchSocket();
+        var holePunchSocket = CreateHolePunchSocket(_modSettings.MmsSettings.LocalBindIp);
         var actualPort = GetSocketPort(holePunchSocket);
 
         var task = MmsClient.CreateLobbyAsync(
             hostPort: actualPort,
             isPublic: isPublic,
             gameVersion: Application.version,
-            lobbyType: lobbyType
+            lobbyType: lobbyType,
+            hostIpOverride: _modSettings.MmsSettings.HostIpOverride,
+            hostLanIpOverride: _modSettings.MmsSettings.HostLanIpOverride
         );
 
         yield return new WaitUntil(() => task.IsCompleted);
@@ -1769,9 +1795,25 @@ internal class ConnectInterface {
             return;
         }
 
+        ResetConnectionButtons();
+
+        // If this was a timeout and we have a pending retry, consume it and re-run the full connect flow.
+        if (_pendingHolePunchRetryLobbyId != null && result.Reason == ConnectionFailedReason.TimedOut) {
+            var lobbyIdToRetry = _pendingHolePunchRetryLobbyId;
+            _pendingHolePunchRetryLobbyId = null;
+
+            if (ValidateUsername(out var username)) {
+                Logger.Info($"ConnectInterface: Connection timed out. Retrying full join flow for lobby {lobbyIdToRetry} once.");
+                ShowFeedback(Color.yellow, "Connection timed out. Retrying...");
+                MonoBehaviourUtil.Instance.StartCoroutine(JoinLobbyCoroutine(lobbyIdToRetry, username));
+                return;
+            }
+        }
+
+        _pendingHolePunchRetryLobbyId = null;
+
         var message = GetFailureMessage(result);
         ShowFeedback(Color.red, message);
-        ResetConnectionButtons();
     }
 
     #endregion
@@ -1953,17 +1995,19 @@ internal class ConnectInterface {
     /// <summary>
     /// Creates and configures a UDP socket for hole-punching.
     /// </summary>
-    private static Socket CreateHolePunchSocket() {
+    private static Socket CreateHolePunchSocket(string? bindIpAddress) {
         var socket = new Socket(
             AddressFamily.InterNetwork,
             SocketType.Dgram,
             ProtocolType.Udp
         );
 
+        var bindAddress = NetworkingUtil.ResolveBindAddress(bindIpAddress);
+
         try {
-            socket.Bind(new IPEndPoint(IPAddress.Any, 26960));
+            socket.Bind(new IPEndPoint(bindAddress, 26960));
         } catch (SocketException) {
-            socket.Bind(new IPEndPoint(IPAddress.Any, 0));
+            socket.Bind(new IPEndPoint(bindAddress, 0));
         }
 
         return socket;
@@ -1982,10 +2026,11 @@ internal class ConnectInterface {
     private void ConnectToMatchmakingLobby(
         string connectionData,
         string? lanConnectionData,
+        bool preferLanFastPath,
         string username,
         Socket? holePunchSocket
     ) {
-        var connectionInfo = DetermineConnectionInfo(connectionData, lanConnectionData);
+        var connectionInfo = DetermineConnectionInfo(connectionData, lanConnectionData, preferLanFastPath);
 
         if (connectionInfo == null) {
             ShowFeedback(Color.red, "Invalid connection data");
@@ -2010,13 +2055,18 @@ internal class ConnectInterface {
     /// <summary>
     /// Determines the optimal connection strategy (LAN first, then public).
     /// </summary>
-    private static ConnectionInfo? DetermineConnectionInfo(string publicConnectionData, string? lanConnectionData) {
+    private static ConnectionInfo? DetermineConnectionInfo(
+        string publicConnectionData,
+        string? lanConnectionData,
+        bool preferLanFastPath
+    ) {
         // Public connection is required in all cases
         if (!TryParseConnectionData(publicConnectionData, out var publicIp, out var publicPort))
             return null;
 
         // Prefer LAN if available, using public as the fallback relay
-        if (!string.IsNullOrEmpty(lanConnectionData) &&
+        if (preferLanFastPath &&
+            !string.IsNullOrEmpty(lanConnectionData) &&
             TryParseConnectionData(lanConnectionData, out var lanIp, out var lanPort)) {
             return new ConnectionInfo(
                 lanIp, lanPort, $"{publicIp}:{publicPort}", $"Connecting to LAN {lanIp}:{lanPort}..."
