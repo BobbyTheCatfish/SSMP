@@ -769,7 +769,7 @@ internal enum AnimationClip {
     ToolThreefoldPin,
     ToolStingShard,
     ToolTacks,
-    ToolLongPin,
+    ToolLongpin,
     ToolCurveclaw,
     ToolCurvesickle,
     ToolThrowingRing,

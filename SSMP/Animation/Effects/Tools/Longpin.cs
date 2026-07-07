@@ -8,9 +8,9 @@ using UnityEngine;
 namespace SSMP.Animation.Effects.Tools;
 
 /// <summary>
-/// Class for the tool effect of the Long Pin.
+/// Class for the tool effect of the Longpin.
 /// </summary>
-internal class LongPin : BaseAttackTool {
+internal class Longpin : BaseAttackTool {
     /// <summary>
     /// Cached prefab for one attacking pin.
     /// </summary>
@@ -37,7 +37,7 @@ internal class LongPin : BaseAttackTool {
         var prefab = GetPrefab(playerObject);
         if (!prefab) return;
 
-        // Get the last time a Long Pin was fired
+        // Get the last time a Longpin was fired
         var key = playerObject.GetInstanceID();
         var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
@@ -56,10 +56,10 @@ internal class LongPin : BaseAttackTool {
     }
 
     /// <summary>
-    /// Gets the modified Long Pin prefab.
+    /// Gets the modified Longpin prefab.
     /// </summary>
-    /// <param name="playerObject">The player using the Long Pin.</param>
-    /// <returns>The Long Pin prefab.</returns>
+    /// <param name="playerObject">The player using the Longpin.</param>
+    /// <returns>The Longpin prefab.</returns>
     private static GameObject? GetPrefab(GameObject playerObject) {
         // If the modified prefab exists already, return it
         if (_modifiedPrefab) return _modifiedPrefab;
@@ -100,13 +100,13 @@ internal class LongPin : BaseAttackTool {
     }
 
     /// <summary>
-    /// Spawns a Long Pin at the given position.
+    /// Spawns a Longpin at the given position.
     /// </summary>
-    /// <param name="prefab">The Long Pin prefab.</param>
-    /// <param name="spawnPosition">The position to spawn the Long Pin.</param>
-    /// <param name="angle">The angle to fire the Long Pin at.</param>
+    /// <param name="prefab">The Longpin prefab.</param>
+    /// <param name="spawnPosition">The position to spawn the Longpin.</param>
+    /// <param name="angle">The angle to fire the Longpin at.</param>
     /// <param name="facingRight">Whether the player is facing right.</param>
-    /// <param name="poisoned">Whether the Long Pin is poisoned.</param>
+    /// <param name="poisoned">Whether the Longpin is poisoned.</param>
     private void SpawnPin(GameObject prefab, Vector3 spawnPosition, float angle, bool facingRight, bool poisoned) {
         // Spawn pin
         var pin = prefab.Spawn(spawnPosition);

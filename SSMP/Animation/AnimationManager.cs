@@ -636,7 +636,7 @@ internal class AnimationManager {
         { "Tool Magma Bell", AnimationClip.ToolMagmaBell },
         { "Tool Straight Pin ", AnimationClip.ToolStraightPin  },
         { "Tool Threefold Pin", AnimationClip.ToolThreefoldPin },
-        { "Tool Long Pin", AnimationClip.ToolLongPin },
+        { "Tool Long Pin", AnimationClip.ToolLongpin },
         { "Tool Tacks", AnimationClip.ToolTacks }
     };
 
@@ -709,7 +709,7 @@ internal class AnimationManager {
         { AnimationClip.ToolMagmaBell, new MagmaBell() },
         { AnimationClip.ToolStraightPin, new StraightPin() },
         { AnimationClip.ToolThreefoldPin, new ThreefoldPin() },
-        { AnimationClip.ToolLongPin, new LongPin() },
+        { AnimationClip.ToolLongpin, new Longpin() },
         { AnimationClip.ToolTacks, new Tacks() }
     };
 
