@@ -28,8 +28,6 @@ internal class ThreefoldPin : BaseAttackTool {
 
             _modifiedPrefab.SetActive(false);
             _modifiedPrefab.name = "THREEFOLD PIN";
-
-            AddDamageHeroComponent(_modifiedPrefab);
         }
 
         // Play audio
@@ -96,11 +94,7 @@ internal class ThreefoldPin : BaseAttackTool {
 
         body.linearVelocity = new Vector2(x, y);
 
-        // Set damage settings
-        if (pin.TryGetComponent<DamageHero>(out var damager)) {
-            damager.enabled = ShouldDoDamage && ServerSettings.IsPvpEnabled;
-            damager.SetDamageAmount(1);
-        }
+        SetDamageHeroState(pin, ServerSettings.ThreefoldPinDamage);
 
         // Set poison settings and deflection
         if (pin.TryGetComponent<ToolPin>(out var controller)) {

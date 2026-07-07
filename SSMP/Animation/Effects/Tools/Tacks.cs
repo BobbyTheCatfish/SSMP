@@ -72,8 +72,7 @@ internal class Tacks : BaseAttackTool {
             var tack = prefab.Spawn(group.transform);
 
             // Set damage settings
-            // TODO: add damage setting for this tool
-            SetDamageHeroState(tack);
+            SetDamageHeroState(tack, ServerSettings.TacksDamage);
 
             // Set spawn position
             var variationX = Random.Range(-0.1f, 0.1f);
@@ -223,9 +222,6 @@ internal class Tacks : BaseAttackTool {
                 ToFsmState = pauseFrame,
                 ToState = "Pause Frame"
             };
-
-            // Add damager
-            AddDamageHeroComponent(_modifiedPrefab);
         }
 
         return _modifiedPrefab;

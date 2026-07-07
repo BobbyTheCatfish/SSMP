@@ -96,9 +96,6 @@ internal class LongPin : BaseAttackTool {
 
         longPinTool.reboundBox = reboundBoxObject;
 
-        // Set up damager
-        AddDamageHeroComponent(_modifiedPrefab);
-
         return _modifiedPrefab;
     }
 
@@ -143,8 +140,7 @@ internal class LongPin : BaseAttackTool {
         body.linearVelocity = new Vector2(x, y);
 
         // Set damage settings
-        // TODO: add damage setting for this tool
-        SetDamageHeroState(pin);
+        SetDamageHeroState(pin, ServerSettings.LongpinDamage);
 
         // Set poison settings and deflection
         if (pin.TryGetComponent<ToolPin>(out var controller)) {

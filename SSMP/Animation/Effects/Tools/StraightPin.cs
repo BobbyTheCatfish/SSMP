@@ -30,8 +30,6 @@ internal class StraightPin : BaseAttackTool {
 
             _modifiedPrefab.SetActive(false);
             _modifiedPrefab.name = "STRAIGHT PIN";
-
-            AddDamageHeroComponent(_modifiedPrefab);
         }
 
         // Spawn in prefab
@@ -47,8 +45,7 @@ internal class StraightPin : BaseAttackTool {
         pin.transform.localScale = new Vector3(scale, 1, 1);
 
         // Set damage settings
-        // TODO: add damage setting for this tool
-        SetDamageHeroState(pin);
+        SetDamageHeroState(pin, ServerSettings.StraightPinDamage);
 
         // Set initial velocity
         if (pin.TryGetComponent<Rigidbody2D>(out var body)) {
