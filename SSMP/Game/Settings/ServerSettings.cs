@@ -342,6 +342,18 @@ public class ServerSettings : IServerSettings, IEquatable<ServerSettings> {
         }
     } = 1;
 
+    /// <inheritdoc />
+    [SettingAlias("curvesickledmg", "sickledmg", "sickledamage", "boomerang2dmg", "boomerang2damage")]
+    [ModMenuSetting("Curvesickle Damage", "The number of masks of damage that a Curvesickle deals")]
+    public byte CurvesickleDamage {
+        get;
+        init {
+            if (field == value) return;
+            field = value;
+            ChangeEvent?.Invoke(nameof(CurvesickleDamage));
+        }
+    } = 1;
+
     /// <summary>
     /// Set all properties in this <see cref="ServerSettings"/> instance to the values from the given
     /// <see cref="ServerSettings"/> instance.

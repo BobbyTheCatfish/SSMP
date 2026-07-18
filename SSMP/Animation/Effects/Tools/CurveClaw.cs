@@ -27,7 +27,11 @@ internal class CurveClaw : BaseAttackTool {
 
         // Spawn the claw
         var claw = _modifiedPrefab.Spawn(playerObject.transform.position);
-        SetDamageHeroState(claw, playerObject, ServerSettings.CurveclawDamage);
+
+        var damager = claw.FindGameObjectInChildren("Enemy Damager");
+        if (damager) {
+            SetDamageHeroState(damager, playerObject, ServerSettings.CurveclawDamage);
+        }
 
         // Throw it (mostly to set the scale)
         ThrowTool(claw, playerObject, tool.Usage, effectInfo, false);
