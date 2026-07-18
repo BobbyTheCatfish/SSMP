@@ -17,14 +17,13 @@ internal class StraightPin : BaseAttackTool {
     /// <inheritdoc/>
     public override void Play(GameObject playerObject, CrestType crestType, byte[]? effectInfo) {
         // Get original prefab
-        var toolRoot = ToolItemManager.GetToolByName("Straight Pin");
-        if (toolRoot is not ToolItemBasic tool) return;
+        var tool = ToolItemManager.GetToolByName("Straight Pin");
 
         var poisoned = EffectIsPoisoned(effectInfo);
 
         // Set up modified prefab
         if (!_modifiedPrefab) {
-            var prefab = tool.usageOptions.ThrowPrefab;
+            var prefab = tool.Usage.ThrowPrefab;
             _modifiedPrefab = EffectUtils.SpawnGlobalPoolObject(prefab, playerObject.transform, 0);
             if (!_modifiedPrefab) return;
 
@@ -49,7 +48,7 @@ internal class StraightPin : BaseAttackTool {
 
         // Set initial velocity
         if (pin.TryGetComponent<Rigidbody2D>(out var body)) {
-            body.linearVelocityX = tool.usageOptions.ThrowVelocity.x * scale;
+            body.linearVelocityX = tool.Usage.ThrowVelocity.x * scale;
         }
 
         // Set poison settings and deflection

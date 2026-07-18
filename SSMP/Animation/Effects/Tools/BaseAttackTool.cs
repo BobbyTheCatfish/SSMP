@@ -17,7 +17,7 @@ internal abstract class BaseAttackTool : DamageAnimationEffect {
         { "Sting Shard", AnimationClip.ToolStingShard } ,
         { "Tack", AnimationClip.ToolTacks } ,
         { "Harpoon", AnimationClip.ToolLongpin } ,
-        //{ "Curve Claws", AnimationClip.ToolCurveclaw } ,
+        { "Curve Claws", AnimationClip.ToolCurveclaw } ,
         //{ "Curve Claws Upgraded", AnimationClip.ToolCurvesickle } ,
         //{ "Shakra Ring", AnimationClip.ToolThrowingRing } ,
         //{ "Pimpilo", AnimationClip.ToolPimpillo } ,
@@ -155,7 +155,7 @@ internal abstract class BaseAttackTool : DamageAnimationEffect {
         if (usage.ScaleToHero) {
             var localScale = usage.ThrowPrefab.transform.localScale;
 
-            if (hc.transform.localScale.x == -1) {
+            if (!facingLeft) {
                 localScale.x *= -1;
             }
             

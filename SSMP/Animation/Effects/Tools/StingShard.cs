@@ -90,7 +90,7 @@ internal class StingShard : BaseAttackTool {
         // Set up damager
         var damager = shard.FindGameObjectInChildren("Damager");
         if (damager) {
-            SetDamageHeroState(damager, playerObject, ServerSettings.IsPvpEnabled && ShouldDoDamage, ServerSettings.StingShardDamage);
+            SetDamageHeroState(damager, playerObject, ServerSettings.StingShardDamage);
         }
 
         // Set up FSM

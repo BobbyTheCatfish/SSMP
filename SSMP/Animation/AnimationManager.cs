@@ -639,6 +639,7 @@ internal class AnimationManager {
         { "Tool Long Pin", AnimationClip.ToolLongpin },
         { "Tool Sting Shard", AnimationClip.ToolStingShard },
         { "Tool Tacks", AnimationClip.ToolTacks },
+        { "Tool Curve Claw", AnimationClip.ToolCurveclaw }
     };
 
     /// <summary>
@@ -711,8 +712,9 @@ internal class AnimationManager {
         { AnimationClip.ToolStraightPin, new StraightPin() },
         { AnimationClip.ToolThreefoldPin, new ThreefoldPin() },
         { AnimationClip.ToolLongpin, new Longpin() },
-        { AnimationClip.ToolTacks, new Tacks() },
         { AnimationClip.ToolStingShard, new StingShard() },
+        { AnimationClip.ToolTacks, new Tacks() },
+        { AnimationClip.ToolCurveclaw, new CurveClaw() }
     };
 
     #endregion
