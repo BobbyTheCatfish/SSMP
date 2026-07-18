@@ -26,17 +26,22 @@ internal class CurveSickle : BaseAttackTool {
 
         // Spawn the sickle
         var sickle = _modifiedPrefab.Spawn(playerObject.transform.position);
+        var controller = sickle.GetComponent<ToolBoomerang>();
 
         var damager = sickle.FindGameObjectInChildren("Enemy Damager");
         if (damager) {
-            SetDamageHeroState(damager, playerObject, ServerSettings.CurvesickleDamage);
+            var heroDamage = SetDamageHeroState(damager, playerObject, ServerSettings.CurvesickleDamage);
+
+            if (heroDamage && controller) {
+                heroDamage.HeroDamaged += controller.OnDamagedEnemy;
+            }
         }
 
         // Throw it (mostly to set the scale and offset)
         ThrowTool(sickle, playerObject, tool.Usage, effectInfo, false);
 
         // Set the poison state
-        if (sickle.TryGetComponent<ToolBoomerang>(out var controller)) {
+        if (controller) {
             CurveClaw.SetBoomerangPoison(controller, EffectIsPoisoned(effectInfo));
         }
     }

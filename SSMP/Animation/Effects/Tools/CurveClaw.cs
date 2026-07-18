@@ -27,17 +27,22 @@ internal class CurveClaw : BaseAttackTool {
 
         // Spawn the claw
         var claw = _modifiedPrefab.Spawn(playerObject.transform.position);
+        var controller = claw.GetComponent<ToolBoomerang>();
 
         var damager = claw.FindGameObjectInChildren("Enemy Damager");
         if (damager) {
-            SetDamageHeroState(damager, playerObject, ServerSettings.CurveclawDamage);
+            var heroDamage = SetDamageHeroState(damager, playerObject, ServerSettings.CurveclawDamage);
+
+            if (heroDamage && controller) {
+                heroDamage.HeroDamaged += controller.OnDamagedEnemy;
+            }
         }
 
         // Throw it (mostly to set the scale)
         ThrowTool(claw, playerObject, tool.Usage, effectInfo, false);
 
         // Set the poison state
-        if (claw.TryGetComponent<ToolBoomerang>(out var controller)) {
+        if (controller) {
             SetBoomerangPoison(controller, EffectIsPoisoned(effectInfo));
         }
     }

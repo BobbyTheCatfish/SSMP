@@ -354,6 +354,18 @@ public class ServerSettings : IServerSettings, IEquatable<ServerSettings> {
         }
     } = 1;
 
+    /// <inheritdoc />
+    [SettingAlias("throwingringdmg", "ringdmg", "ringdamage", "shakraringdmg", "shakraringdamage")]
+    [ModMenuSetting("Throwing Ring Damage", "The number of masks of damage that a Throwing Ring deals")]
+    public byte ThrowingRingDamage {
+        get;
+        init {
+            if (field == value) return;
+            field = value;
+            ChangeEvent?.Invoke(nameof(ThrowingRingDamage));
+        }
+    } = 1;
+
     /// <summary>
     /// Set all properties in this <see cref="ServerSettings"/> instance to the values from the given
     /// <see cref="ServerSettings"/> instance.

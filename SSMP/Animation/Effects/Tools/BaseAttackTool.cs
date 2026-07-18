@@ -19,7 +19,7 @@ internal abstract class BaseAttackTool : DamageAnimationEffect {
         { "Harpoon", AnimationClip.ToolLongpin },
         { "Curve Claws", AnimationClip.ToolCurveclaw },
         { "Curve Claws Upgraded", AnimationClip.ToolCurvesickle },
-        //{ "Shakra Ring", AnimationClip.ToolThrowingRing },
+        { "Shakra Ring", AnimationClip.ToolThrowingRing },
         //{ "Pimpilo", AnimationClip.ToolPimpillo },
         //{ "Conch Drill", AnimationClip.ToolConchcutter },
         //{ "Cogwork Saw", AnimationClip.ToolCogworkWheel },
