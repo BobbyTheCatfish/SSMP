@@ -307,6 +307,18 @@ public class ServerSettings : IServerSettings, IEquatable<ServerSettings> {
     } = 1;
 
     /// <inheritdoc />
+    [SettingAlias("stingsharddmg", "sharddmg", "sharddamage")]
+    [ModMenuSetting("Sting Shard Damage", "The number of masks of damage that a Sting Shard deal")]
+    public byte StingShardDamage {
+        get;
+        init {
+            if (field == value) return;
+            field = value;
+            ChangeEvent?.Invoke(nameof(StingShardDamage));
+        }
+    } = 1;
+
+    /// <inheritdoc />
     [SettingAlias("tackdmg", "tacksdmg", "tackdamage")]
     [ModMenuSetting("Tacks Damage", "The number of masks of damage that Tacks deal")]
     public byte TacksDamage {

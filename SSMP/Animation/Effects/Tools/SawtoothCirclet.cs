@@ -42,8 +42,8 @@ internal static class SawtoothCirclet {
         var damagerLeft = damagerParent?.FindGameObjectInChildren("Damager L");
 
         var damage = serverSettings.SawtoothCircletDamage;
-        if (damagerRight != null) DamageAnimationEffect.SetDamageHeroState(damagerRight, doDamage, damage);
-        if (damagerLeft != null) DamageAnimationEffect.SetDamageHeroState(damagerLeft, doDamage, damage);
+        if (damagerRight != null) DamageAnimationEffect.SetDamageHeroState(damagerRight, playerObject, doDamage, damage);
+        if (damagerLeft != null) DamageAnimationEffect.SetDamageHeroState(damagerLeft, playerObject, doDamage, damage);
 
         // Refresh the circlet
         circlet.SetActive(false);

@@ -145,7 +145,7 @@ internal class BindBurst : Bind {
             damager.layer = AttackLayer;
 
             var damage = upgraded ? ServerSettings.ClawMirrorUpgradedDamage : ServerSettings.ClawMirrorDamage;
-            var damageComponent = AddDamageHeroComponent(damager, damage);
+            var damageComponent = AddDamageHeroComponent(damager, playerObject, damage);
             damageComponent.hazardType = GlobalEnums.HazardType.EXPLOSION;
 
             FixDamageEnemies(damager);
@@ -204,7 +204,7 @@ internal class BindBurst : Bind {
         }
 
         // Toggle damage depending on if PVP is on or not
-        SetWitchDamagers(witchBind);
+        SetWitchDamagers(witchBind, bindEffects.transform.parent.gameObject);
 
         // Play tentacles audio
         var audio = GetOrFindBindFsm().GetFirstAction<PlayAudioEvent>("Witch Tentancles!");
@@ -217,7 +217,7 @@ internal class BindBurst : Bind {
     /// <summary>
     /// Adds or removes hero damage components from Witch Crest bind
     /// </summary>
-    private void SetWitchDamagers(GameObject witchBind) {
+    private void SetWitchDamagers(GameObject witchBind, GameObject playerObject) {
         // Loop through all children, looking for all the ones called "Damager"
         for (var i = 0; i < witchBind.transform.childCount; i++) {
             var child = witchBind.transform.GetChild(i);
@@ -226,7 +226,7 @@ internal class BindBurst : Bind {
             }
 
             // Add or remove damage component from Damager object
-            SetDamageHeroState(child.gameObject);
+            SetDamageHeroState(child.gameObject, playerObject);
             FixDamageEnemies(child.gameObject);
         }
     }

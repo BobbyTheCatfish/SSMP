@@ -94,7 +94,7 @@ internal class ThreefoldPin : BaseAttackTool {
 
         body.linearVelocity = new Vector2(x, y);
 
-        SetDamageHeroState(pin, ServerSettings.ThreefoldPinDamage);
+        SetDamageHeroState(pin, playerObject, ServerSettings.ThreefoldPinDamage);
 
         // Set poison settings and deflection
         if (pin.TryGetComponent<ToolPin>(out var controller)) {

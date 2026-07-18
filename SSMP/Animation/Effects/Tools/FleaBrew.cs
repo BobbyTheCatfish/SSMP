@@ -29,13 +29,6 @@ internal class FleaBrew : BaseAttackTool {
     public static readonly FleaBrew Instance = new();
 
     /// <inheritdoc/>
-    public override byte[] GetEffectInfo() {
-        return [
-            (byte) (HasPoison() ? 1 : 0)
-        ];
-    }
-
-    /// <inheritdoc/>
     public override void Play(GameObject playerObject, CrestType crestType, byte[]? effectInfo) {
         var hc = HeroController.instance;
         var isPoison = EffectIsPoisoned(effectInfo);
@@ -63,7 +56,7 @@ internal class FleaBrew : BaseAttackTool {
 
         // Set up poison clouds
         if (isPoison && ShouldDoDamage && ServerSettings.IsPvpEnabled) {
-            SetPoisonTrail(particles);
+            SetPoisonTrail(particles, playerObject);
         }
 
         // Play sprite flash
@@ -147,7 +140,8 @@ internal class FleaBrew : BaseAttackTool {
     /// Sets up a poison trail that deals damage.
     /// </summary>
     /// <param name="particles">The poisoned Flea Brew particle spawner.</param>
-    private void SetPoisonTrail(GameObject particles) {
+    /// <param name="playerObject">The game object of the player that is using Flea Brew.</param>
+    private void SetPoisonTrail(GameObject particles, GameObject playerObject) {
         // Find the prefab spawner
         var spawnerObj = particles.FindGameObjectInChildren("Trail Spawner");
         if (!spawnerObj) return;
@@ -176,7 +170,7 @@ internal class FleaBrew : BaseAttackTool {
             // Set the damager
             var damager = _modifiedPoisonTrail.FindGameObjectInChildren("damager");
             if (damager) {
-                AddDamageHeroComponent(damager, ServerSettings.PoisonBrewDamage);
+                AddDamageHeroComponent(damager, playerObject, ServerSettings.PoisonBrewDamage);
                 damager.layer = 17;
             }
         } else {

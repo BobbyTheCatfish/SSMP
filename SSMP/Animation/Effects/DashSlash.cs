@@ -109,7 +109,7 @@ internal class DashSlash : SlashBase {
             ApplyLongclawMultiplier(longclaw, SlashType.Dash, slashObj, scale);
             
             if (ServerSettings.IsPvpEnabled && ShouldDoDamage) {
-                AddDamageHeroComponent(slashObj, ServerSettings.NeedleDamage);
+                AddDamageHeroComponent(slashObj, playerObject, ServerSettings.NeedleDamage);
             }
 
             FixDamageEnemies(slashObj);

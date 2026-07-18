@@ -399,7 +399,7 @@ internal class NeedleStrike : DamageAnimationEffect {
         FixDamageEnemies(gameObject);
 
         if (damage.HasValue) {
-            AddDamageHeroComponent(gameObject, damage.Value);
+            AddDamageHeroComponent(gameObject, gameObject.transform.parent.gameObject, damage.Value);
         }
     }
 }

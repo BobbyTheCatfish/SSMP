@@ -63,7 +63,7 @@ internal class SilkSpear : BaseSilkSkill {
         // Set damager
         var damager = needle?.FindGameObjectInChildren("Needle Damage");
         if (damager) {
-            SetDamageHeroStateCalculated(damager, ServerSettings.SilkSpearDamage, isVolt, isShaman);
+            SetDamageHeroStateCalculated(damager, playerObject, ServerSettings.SilkSpearDamage, isVolt, isShaman);
             MonoBehaviourUtil.Instance.StartCoroutine(PlayPossibleThunk(playerObject, spear, damager));
         } else {
             Logger.Warn("Unable to set damager for Silk Spear");

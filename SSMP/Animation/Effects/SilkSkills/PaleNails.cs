@@ -226,7 +226,7 @@ internal class PaleNails : BaseSilkSkill {
             // Set the damage state
             var damager = nail.FindGameObjectInChildren("Enemy Damager");
             if (damager) {
-                SetDamageHeroStateCalculated(damager, ServerSettings.PaleNailsDamage, isVolt, isShaman);
+                SetDamageHeroStateCalculated(damager, playerObject, ServerSettings.PaleNailsDamage, isVolt, isShaman);
             }
 
             // Remove interfering components

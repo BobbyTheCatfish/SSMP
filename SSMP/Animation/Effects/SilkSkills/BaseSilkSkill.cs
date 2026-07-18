@@ -145,10 +145,11 @@ internal abstract class BaseSilkSkill : DamageAnimationEffect {
     /// <see cref="DamageAnimationEffect.SetDamageHeroState"/> with a calculated damage amount for silk skills.
     /// </summary>
     /// <param name="damager">The target game object to attach or remove the component from.</param>
+    /// <param name="playerObject">The game object of the player that used the silk skill.</param>
     /// <param name="baseDamage">The base silk skill damage.</param>
     /// <param name="isVolt">If the Volt Filament is equipped.</param>
     /// <param name="isShaman">If the player is using the Shaman Crest.</param>
-    protected DamageHero? SetDamageHeroStateCalculated(GameObject damager, int baseDamage, bool isVolt, bool isShaman) {
+    protected DamageHero? SetDamageHeroStateCalculated(GameObject damager, GameObject playerObject, int baseDamage, bool isVolt, bool isShaman) {
         float damage = baseDamage;
         if (isVolt) {
             damage += (float) ServerSettings.VoltFilamentDamage / 2;
@@ -161,6 +162,6 @@ internal abstract class BaseSilkSkill : DamageAnimationEffect {
         damager.layer = AttackLayer;
         FixDamageEnemies(damager);
 
-        return SetDamageHeroState(damager, (int) damage);
+        return SetDamageHeroState(damager, playerObject, (int) damage);
     }
 }

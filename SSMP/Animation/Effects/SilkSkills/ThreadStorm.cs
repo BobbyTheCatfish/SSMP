@@ -115,7 +115,7 @@ internal class ThreadStorm : BaseSilkSkill {
             damager.transform.localScale = new Vector3(0.8f, 0.8f, 1);
             AnimateScaleReset(damager);
 
-            SetDamageHeroStateCalculated(damager, ServerSettings.ThreadStormDamage, isVolt, isShaman);
+            SetDamageHeroStateCalculated(damager, playerObject, ServerSettings.ThreadStormDamage, isVolt, isShaman);
             damager.SetActive(true);
         } else {
             Logger.Warn("Unable to set damager for Thread Storm");

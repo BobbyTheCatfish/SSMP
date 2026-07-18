@@ -45,7 +45,7 @@ internal class StraightPin : BaseAttackTool {
         pin.transform.localScale = new Vector3(scale, 1, 1);
 
         // Set damage settings
-        SetDamageHeroState(pin, ServerSettings.StraightPinDamage);
+        SetDamageHeroState(pin, playerObject, ServerSettings.StraightPinDamage);
 
         // Set initial velocity
         if (pin.TryGetComponent<Rigidbody2D>(out var body)) {

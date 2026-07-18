@@ -188,7 +188,7 @@ internal abstract class SlashBase : ParryableEffect {
         }
 
         if (ServerSettings.IsPvpEnabled && ShouldDoDamage) {
-            AddDamageHeroComponent(slashObj, ServerSettings.NeedleDamage);
+            AddDamageHeroComponent(slashObj, playerObject, ServerSettings.NeedleDamage);
         }
 
         FixDamageEnemies(slashObj);

@@ -637,7 +637,8 @@ internal class AnimationManager {
         { "Tool Straight Pin ", AnimationClip.ToolStraightPin  },
         { "Tool Threefold Pin", AnimationClip.ToolThreefoldPin },
         { "Tool Long Pin", AnimationClip.ToolLongpin },
-        { "Tool Tacks", AnimationClip.ToolTacks }
+        { "Tool Sting Shard", AnimationClip.ToolStingShard },
+        { "Tool Tacks", AnimationClip.ToolTacks },
     };
 
     /// <summary>
@@ -710,7 +711,8 @@ internal class AnimationManager {
         { AnimationClip.ToolStraightPin, new StraightPin() },
         { AnimationClip.ToolThreefoldPin, new ThreefoldPin() },
         { AnimationClip.ToolLongpin, new Longpin() },
-        { AnimationClip.ToolTacks, new Tacks() }
+        { AnimationClip.ToolTacks, new Tacks() },
+        { AnimationClip.ToolStingShard, new StingShard() },
     };
 
     #endregion
@@ -1051,6 +1053,7 @@ internal class AnimationManager {
     /// <param name="player">The player that left the scene.</param>
     public void OnPlayerLeaveScene(ClientPlayerData player) {
         Tacks.DestroyPlayerTacks(player.PlayerObject);
+        StingShard.DestroyPlayerShards(player.PlayerObject);
     }
 
     /// <summary>

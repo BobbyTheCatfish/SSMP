@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GenericVariableExtension;
 using HutongGames.PlayMaker;
 
 namespace SSMP.Util;
@@ -149,6 +150,52 @@ public static class FsmUtilExt {
 
             return true;
         }).ToArray();
+    }
+
+    /// <summary>
+    /// Adds a named variable to a FSM.
+    /// </summary>
+    /// <typeparam name="T">The type of variable.</typeparam>
+    /// <param name="vars">The FSM's variable manager.</param>
+    /// <param name="newVar">The new FSM variable.</param>
+    /// <param name="varsArrayName">The name of the array on <see cref="FsmVariables"/>.</param>
+    public static void AddVariable<T>(this FsmVariables vars, T newVar, string varsArrayName) where T : NamedVariable {
+        // Get the array from the vars
+        var existingVars = vars.GetVariable<T[]>(varsArrayName);
+        if (existingVars == null) {
+            throw new ArgumentException("Invalid array property name for varsArrayName. Must be a property of FsmVariables.");
+        }
+
+        // Add the new var
+        var newVars = existingVars.Append(newVar);
+        vars.SetVariable(varsArrayName, newVars.ToArray());
+
+        // Add a lookup
+        vars.AddVariableLookup(newVar);
+    }
+
+    /// <summary>
+    /// Adds multiple named variables to a FSM.
+    /// </summary>
+    /// <typeparam name="T">The type of variable.</typeparam>
+    /// <param name="vars">The FSM's variable manager.</param>
+    /// <param name="newVars">The new FSM variables.</param>
+    /// <param name="varsArrayName">The name of the array on <see cref="FsmVariables"/>.</param>
+    public static void AddVariables<T>(this FsmVariables vars, T[] newVars, string varsArrayName) where T : NamedVariable {
+        // Get the array from the vars
+        var existingVars = vars.GetVariable<T[]>(varsArrayName);
+        if (existingVars == null) {
+            throw new ArgumentException("Invalid array property name for varsArrayName. Must be a property of FsmVariables.");
+        }
+
+        // Add the new vars
+        var combinedVars = existingVars.Concat(newVars);
+        vars.SetVariable(varsArrayName, combinedVars.ToArray());
+
+        // Add lookups
+        foreach (var newVar in newVars) {
+            vars.AddVariableLookup(newVar);
+        }
     }
 }
 

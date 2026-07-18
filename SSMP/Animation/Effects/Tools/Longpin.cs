@@ -48,11 +48,11 @@ internal class Longpin : BaseAttackTool {
         // Determine angle based on if the last pin was recent enough (second quick sling shot)
         var angle = UnityEngine.Random.Range(147, 153);
 
-        if (now - lastFireTime < 500) {
+        if (now - lastFireTime < 500 && now != lastFireTime) {
             angle = UnityEngine.Random.Range(134, 140);
         }
 
-        SpawnPin(prefab, spawnPosition, angle, facingRight, poisoned);
+        SpawnPin(prefab, playerObject, spawnPosition, angle, facingRight, poisoned);
     }
 
     /// <summary>
@@ -103,11 +103,12 @@ internal class Longpin : BaseAttackTool {
     /// Spawns a Longpin at the given position.
     /// </summary>
     /// <param name="prefab">The Longpin prefab.</param>
+    /// <param name="playerObject">The game object of the player that is using the Longpin.</param>
     /// <param name="spawnPosition">The position to spawn the Longpin.</param>
     /// <param name="angle">The angle to fire the Longpin at.</param>
     /// <param name="facingRight">Whether the player is facing right.</param>
     /// <param name="poisoned">Whether the Longpin is poisoned.</param>
-    private void SpawnPin(GameObject prefab, Vector3 spawnPosition, float angle, bool facingRight, bool poisoned) {
+    private void SpawnPin(GameObject prefab, GameObject playerObject, Vector3 spawnPosition, float angle, bool facingRight, bool poisoned) {
         // Spawn pin
         var pin = prefab.Spawn(spawnPosition);
         if (!pin) return;
@@ -140,7 +141,7 @@ internal class Longpin : BaseAttackTool {
         body.linearVelocity = new Vector2(x, y);
 
         // Set damage settings
-        SetDamageHeroState(pin, ServerSettings.LongpinDamage);
+        SetDamageHeroState(pin, playerObject, ServerSettings.LongpinDamage);
 
         // Set poison settings and deflection
         if (pin.TryGetComponent<ToolPin>(out var controller)) {

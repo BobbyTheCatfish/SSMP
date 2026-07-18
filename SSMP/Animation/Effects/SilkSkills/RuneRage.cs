@@ -77,7 +77,7 @@ internal class RuneRage : BaseSilkSkill {
 
         // There are runes to spawn; do at the same time as the sonar
         if (positions.Count > 0) {
-            PlayRuneRage(positions, isVolt, isShaman);
+            PlayRuneRage(playerObject, positions, isVolt, isShaman);
         }
     }
 
@@ -168,10 +168,11 @@ internal class RuneRage : BaseSilkSkill {
     /// <summary>
     /// Spawns clusters of Rune Rage blasts at the given positions.
     /// </summary>
+    /// <param name="playerObject">The game object of the player that is using Rune Rage.</param>
     /// <param name="positions">The positions to spawn blast clusters at.</param>
     /// <param name="isVolt">Whether the volt filament effects should be used.</param>
     /// <param name="isShaman">Whether the shaman crest effects should be used.</param>
-    private void PlayRuneRage(List<Vector3> positions, bool isVolt, bool isShaman) {
+    private void PlayRuneRage(GameObject playerObject, List<Vector3> positions, bool isVolt, bool isShaman) {
         // Generate spawn template, whose layout kinda looks like . * .
         if (_clusterSpawnTemplate == null) {
             _clusterSpawnTemplate = new GameObject().transform;
@@ -195,7 +196,7 @@ internal class RuneRage : BaseSilkSkill {
 
         // Spawn clusters at each position
         foreach (var position in positions) {
-            MonoBehaviourUtil.Instance.StartCoroutine(PlayRuneCluster(position, isVolt, isShaman));
+            MonoBehaviourUtil.Instance.StartCoroutine(PlayRuneCluster(playerObject, position, isVolt, isShaman));
         }
     }
 
@@ -258,10 +259,11 @@ internal class RuneRage : BaseSilkSkill {
     /// <summary>
     /// Spawns a cluster of three Rune Rage blasts.
     /// </summary>
+    /// <param name="playerObject">The game object of the player that is using Rune Rage.</param>
     /// <param name="position">The initial position to spawn the cluster.</param>
     /// <param name="isVolt">Whether the volt filament effects should be used.</param>
     /// <param name="isShaman">Whether the shaman crest effects should be used.</param>
-    private IEnumerator PlayRuneCluster(Vector3 position, bool isVolt, bool isShaman) {
+    private IEnumerator PlayRuneCluster(GameObject playerObject, Vector3 position, bool isVolt, bool isShaman) {
         if (!_clusterSpawnTemplate) yield break;
 
         // Create local version of template and set the position
@@ -278,7 +280,7 @@ internal class RuneRage : BaseSilkSkill {
             var blastPosition = spawnTemplate.GetChild(i).position;
             blastPosition += offset.RandomInRange();
 
-            CreateBlast(spawnTemplate, isVolt, isShaman, blastPosition);
+            CreateBlast(spawnTemplate, playerObject, isVolt, isShaman, blastPosition);
 
             // Delay next rune by a little bit
             var waitTime = Random.Range(0.15f, 0.2f);
@@ -292,10 +294,11 @@ internal class RuneRage : BaseSilkSkill {
     /// Spawns a single Rune Rage blast.
     /// </summary>
     /// <param name="spawnTransform">The initial parent to use for spawning.</param>
+    /// <param name="playerObject">The game object of the player that is using Rune Rage.</param>
     /// <param name="isVolt">Whether the volt filament effects should be used.</param>
     /// <param name="isShaman">Whether the shaman crest effects should be used.</param>
     /// <param name="position">The final position of the blast.</param>
-    private void CreateBlast(Transform spawnTransform, bool isVolt, bool isShaman, Vector3 position) {
+    private void CreateBlast(Transform spawnTransform, GameObject playerObject, bool isVolt, bool isShaman, Vector3 position) {
         var localBlast = TryGetLocalBlast(isVolt);
         if (localBlast == null) return;
 
@@ -311,7 +314,7 @@ internal class RuneRage : BaseSilkSkill {
             .FindGameObjectInChildren("damager");
 
         if (damager != null) {
-            SetDamageHeroStateCalculated(damager, ServerSettings.RuneRageDamage, isVolt, isShaman);
+            SetDamageHeroStateCalculated(damager, playerObject, ServerSettings.RuneRageDamage, isVolt, isShaman);
         }
 
         // Remove extra recycling component
