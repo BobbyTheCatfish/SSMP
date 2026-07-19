@@ -30,7 +30,7 @@ internal class Clawline : DamageAnimationEffect {
         var hook = fsm.FsmVariables.GetFsmGameObject("Hornet Grab Point");
         if (!hook.Value) {
             hooked = false;
-        } else {
+        } else if (hooked) {
             position = Mathf.Abs(hook.Value.transform.position.x - HeroController.instance.transform.position.x);
         }
 
