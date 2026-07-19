@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using SSMP.Game.Settings;
 using SSMP.Internals;
 using SSMP.Util;
@@ -75,9 +76,10 @@ internal abstract class AnimationEffect : IAnimationEffect {
     /// </summary>
     /// <param name="playerObject">The player object for the player using the effect.</param>
     /// <param name="effectName">The name of the effect object.</param>
+    /// /// <param name="parentName">The name of the effect's parent object.</param>
     /// <param name="effect">The effect, if found or created.</param>
     /// <returns>True if created, false otherwise.</returns>
-    protected static bool TryGetEffect(GameObject playerObject, string effectName, out GameObject? effect) {
+    protected static bool TryGetEffect(GameObject playerObject, string effectName, string parentName, [MaybeNullWhen(false)] out GameObject effect) {
         // Find or create effects for player
         var effects = GetPlayerEffects(playerObject);
 
@@ -88,7 +90,7 @@ internal abstract class AnimationEffect : IAnimationEffect {
         }
 
         // Create new effect
-        var localEffects = HeroController.instance.gameObject.FindGameObjectInChildren("Effects");
+        var localEffects = HeroController.instance.gameObject.FindGameObjectInChildren(parentName);
         if (localEffects == null) {
             return false;
         }
@@ -102,5 +104,16 @@ internal abstract class AnimationEffect : IAnimationEffect {
         effect.name = effectName;
 
         return true;
+    }
+
+    /// <summary>
+    /// Attempts to get or create an effect from the Effects sub-object.
+    /// </summary>
+    /// <param name="playerObject">The player object for the player using the effect.</param>
+    /// <param name="effectName">The name of the effect object.</param>
+    /// <param name="effect">The effect, if found or created.</param>
+    /// <returns>True if created, false otherwise.</returns>
+    protected static bool TryGetEffect(GameObject playerObject, string effectName, [MaybeNullWhen(false)] out GameObject effect) {
+        return TryGetEffect(playerObject, effectName, "Effects", out effect);
     }
 }

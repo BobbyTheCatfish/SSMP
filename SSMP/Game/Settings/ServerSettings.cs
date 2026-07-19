@@ -115,6 +115,18 @@ public class ServerSettings : IServerSettings, IEquatable<ServerSettings> {
     } = 2;
 
     /// <inheritdoc />
+    [SettingAlias("clawlinedmg")]
+    [ModMenuSetting("Clawline Damage", "The number of masks of damage that Clawline deals")]
+    public byte ClawlineDamage {
+        get;
+        init {
+            if (field == value) return;
+            field = value;
+            ChangeEvent?.Invoke(nameof(ClawlineDamage));
+        }
+    } = 0;
+
+    /// <inheritdoc />
     [SettingAlias("voltfilamentdmg", "voltdmg", "filamentdmg", "voltmodifier", "voltmod")]
     [ModMenuSetting("Volt Filament Damage Modifier (Half)", "The number of extra half-masks of damage that silk skills with volt filament should deal")]
     public byte VoltFilamentDamage {

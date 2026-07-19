@@ -682,6 +682,7 @@ internal class AnimationManager {
         { AnimationClip.Death, new Death() },
         { AnimationClip.DoubleJump, new FaydownCloak() },
         { AnimationClip.UmbrellaInflate, new DriftersCloak() },
+        { AnimationClip.HarpoonThrow, new Clawline() },
 
         // Silk Skills
         { AnimationClip.NeedleThrowThrowing, new SilkSpear() },
